@@ -54,7 +54,7 @@ CD is a practice that automates the process of deploying code changes to product
 CDE is 
 
 #
-# Connecting Jenkins to a Github Repo containing the APP
+# Connecting Jenkins to a Github Repo containing the APP and running a test for the APP
 
 1. In the Git Bash terminal, we need to create a new SSH key pair for Github and Jenkins:
 - `cd` into your .ssh folder and enter `ssh-keygen -t rsa -b 4096 -C jgillatt@spartaglobal.com` to generate a new key
@@ -64,3 +64,42 @@ CDE is
 3. In the gitbash terminal (in the .ssh folder), use `cat <key file name>.pub` to display the public key
 - Copy the full key from start to finish
 4. Back on Github, paste the key into the 'Key' text box. Then name the deploy key and select 'Add key'
+5. In your web browser enter `http://35.178.11.196:8080/` to connect to Jenkins and login with the user and password
+6. On the dashboard select 'new item' 
+- Enter a name for the item
+- Select freestyle project and click ok
+- Enter a description
+- Select 'Discard old builds' and set it to 3. This prevents old builds from stacking up.
+- Under 'Source Code Management' select 'Git'
+- Go to your Github repo and select the Code dropdown button. Copy the HTTPS URL and paste it into the 'Repository URL' on Jenkins
+- Under 'Credentials' select 'Add/Jenkins'. Then select the 'Kind' dropdown and choose 'SSH Username with private key' 
+- Enter a username (should be the same as the key you generated)
+- Under 'Private key' select 'Enter directly'
+- In the bash terminal use command `cat <key file name>` inside the .ssh folder
+- Copy the entire contents of the key and paste it into the 'key' text box on Jenkins
+- Select 'Add' and then select the key name for the 'Credentials' 
+- Rename the branch to */Main
+- Under 'Build environment' tick the 'Provide Node & npm bin/ folder to PATH' box
+- Under 'Build' select 'Add build step / Execute shell`. Enter the following commands into the box:
+```
+cd app
+npm install
+npm test
+```
+- Save the Item and select 'Build now' from the left.
+7. Under 'Build history', you will see "#1", select the dropdown button and select 'Console output'
+8. At the bottom of the page you should see:
+```
+Your app is ready and listening on port 3000
+  Homepage
+    ✓ should display the homepage at / GET
+    ✓ should contain the word Sparta at / GET
+
+  Fibonacci
+    ✓ should display the correct fibonacci value at /fibonacci/10 GET
+
+
+  3 passing (42ms)
+
+Finished: SUCCESS
+```
