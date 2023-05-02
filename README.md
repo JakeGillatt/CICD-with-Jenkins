@@ -45,7 +45,7 @@ Some of the stages commonly used in Jenkins pipelines:
 Each of these stages can be customized and configured to meet the specific requirements of the project.
 
 #
-# The differences between CI and CD
+# The differences between CI, CD and CDE
 
 CI is a practice where developers frequently integrate code changes into a shared repository, and automated tests are run to detect and fix issues early in the development process. The goal of CI is to ensure that code changes are continuously integrated and tested, allowing developers to identify and fix issues quickly and prevent errors from propagating into the final product.
 
