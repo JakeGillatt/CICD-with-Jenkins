@@ -50,3 +50,17 @@ Each of these stages can be customized and configured to meet the specific requi
 CI is a practice where developers frequently integrate code changes into a shared repository, and automated tests are run to detect and fix issues early in the development process. The goal of CI is to ensure that code changes are continuously integrated and tested, allowing developers to identify and fix issues quickly and prevent errors from propagating into the final product.
 
 CD is a practice that automates the process of deploying code changes to production or staging environments. The goal of CD is to ensure that code changes are deployed quickly, reliably, and consistently, and that the software can be released to customers with minimal manual intervention.
+
+CDE is 
+
+#
+# Connecting Jenkins to a Github Repo containing the APP
+
+1. In the Git Bash terminal, we need to create a new SSH key pair for Github and Jenkins:
+- `cd` into your .ssh folder and enter `ssh-keygen -t rsa -b 4096 -C jgillatt@spartaglobal.com` to generate a new key
+- Name the key and press enter until the key pair is generated
+2. Head over to your github repo that contains the APP and select the settings tab
+- Under 'Deploy keys' Select 'Add deploy key' 
+3. In the gitbash terminal (in the .ssh folder), use `cat <key file name>.pub` to display the public key
+- Copy the full key from start to finish
+4. Back on Github, paste the key into the 'Key' text box. Then name the deploy key and select 'Add key'
