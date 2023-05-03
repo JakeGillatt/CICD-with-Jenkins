@@ -104,7 +104,27 @@ Your app is ready and listening on port 3000
 Finished: SUCCESS
 ```
 #
+# Creating a Webhook
+
+1. On your github repo, go to Settings and select Webhooks
+- Select Add webhook 
+- Enter `http://35.178.11.196:8080/github-webhook/` into the payload URL
+- Select Application/Json
+- Add the Webhook
+2. To use on Jenkins, select the 'GitHub hook trigger for GITScm polling' option under 'Source code management' within the job config
+
+#
 # Merging the Github Dev branch with the Main branch with Jenkins
+
+1. Create new job called jake-merge, we can select our old job template
+2. create dev branch on local host and make change to readme
+3. we do this by `git branch dev` then `git checkout dev`
+4. push to github which should trigger job
+5. if test passed, merge code to main branch
+6. we now switch to our target branch which is `main` by `git checkout main`
+7. We then `git merge dev` which should merge our dev branch into the main branch
+8. `git add .` then `git commit -m "xxxx"` then `git push origin main` and it should push the new merged branch, and we can test this by checking Jenkins, and it should show a new build being deployed.
+9. Like before, it should show the updated code/readme on your GitHub
 
 # Automating CI pipeline
 
@@ -129,15 +149,15 @@ Finished: SUCCESS
 1. Create a new task on Jenkins
 2. In `General`:
 
-    * Write a description
-    * Set `Discard old builds` to 3
-    * `GitHub Project` copy https link to your project and paste it there
+- Write a description
+- Set `Discard old builds` to 3
+- `GitHub Project` copy https link to your project and paste it there
 
 3. In `Source Code management` copy the settings from the previous task. Then click on `Add` in Additional Behaviours and select `Merge before build`:
 
-    * `Name of repository` - set to `origin`
-    * `Branch to merge to` - set to `main`
-    * Rest leave to default
+- `Name of repository` - set to `origin`
+- `Branch to merge to` - set to `main`
+- Rest leave to default
 
 4. In `Post-build Action` click on `Add` and select `Git Publisher`:
 
@@ -154,3 +174,49 @@ Finished: SUCCESS
 3. In `projects to build` type the name of the project you want to run, for example 'jake-devmain-merge'
 4. Save your project
 5. Now, to test if it works, push some changes form your local repo and it should trigger the test first, and if the test is successful it will then merge the changes from dev branch to main branch and push the changes to your GitHub
+
+#
+# Automating CICD to our application on an EC2 Instance
+
+1. Make a new job, we call it `mohammad-ci-merge-dev` and we as before create a template from `mohammad-ci-merge` and scroll down to source code management, additional behaviours and add: `name of repo: origin`, `branch to merge: main`
+
+2. On post build actions select git publisher, then tick 'Push only if build succeeds' and 'Merge results'
+
+3. Go to our `mohammad-ci-merge` job, scroll all the way down to post build actions and select post-build actions, and select the job we just created.
+
+4. Save and we test as before, on GitBash, change code/readme, `git add .` -> `git commit -m "xxx"` -> `git push origin dev`.
+5. once done, it will deploy it on `mohammad-ci-merge` which will update it on the `dev` branch and as we did post build actions, this triggers the `mohammad-ci-merge-dev` job to deploy, this will merge the `dev` branch with the new changes with the `main branch`
+6. Test this by checking the repo on GitHub and navigating between both branches, and see if the changes made on the `dev` branch are the same as the `main` branch
+
+
+
+## create 3rd job to push code to production
+
+1. Launch instance from my app AMI
+2. Configure the security groups as follows:
+```
+SSH - my ip
+SSH - Jenkins ip
+TCP 3000 - any ip
+TCP 8080 - any ip
+TCP 80 - any ip
+```
+3. Launch Instance
+4. Create a new job and use the template from the previous job
+5. Add an SSH Agent under 'Build environment' and select your credentials
+6. In the execute shell enter these commands changing the `ip` to your Public ipv4 addres found on 
+EC2 instance.
+
+```
+scp -v -r -o StrictHostKeyChecking=no app/ ubuntu@<my-ip>:/home/ubuntu/
+ssh -A -o StrictHostKeyChecking=no ubuntu@<my-ip> <<EOF
+#sudo apt install clear#
+
+cd app
+
+#sudo npm install pm2 -g
+# pm2 kill
+nohup node app.js > /dev/null 2>&1 &
+```
+6. Save changes and build to test the deployment of the app
+7. Type public ip with `:3000` at the end to see if the app has deployed
