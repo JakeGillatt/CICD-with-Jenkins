@@ -51,7 +51,7 @@ CI is a practice where developers frequently integrate code changes into a share
 
 CD is a practice that automates the process of deploying code changes to production or staging environments. The goal of CD is to ensure that code changes are deployed quickly, reliably, and consistently, and that the software can be released to customers with minimal manual intervention.
 
-CDE typically stands for Continuous Delivery Environment. A Continuous Delivery Environment refers to the infrastructure and resources required to automate the delivery of software applications from development to production. It includes the tools, processes, and infrastructure needed to deploy, configure, and manage the application in various environments, such as staging and production. 
+CDE (manual) typically stands for Continuous Delivery Environment. A Continuous Delivery Environment refers to the infrastructure and resources required to automate the delivery of software applications from development to production. It includes the tools, processes, and infrastructure needed to deploy, configure, and manage the application in various environments, such as staging and production. 
 
 #
 # Connecting Jenkins to a Github Repo containing the APP and running a test for the APP
