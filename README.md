@@ -210,12 +210,13 @@ EC2 instance.
 ```
 scp -v -r -o StrictHostKeyChecking=no app/ ubuntu@<my-ip>:/home/ubuntu/
 ssh -A -o StrictHostKeyChecking=no ubuntu@<my-ip> <<EOF
-#sudo apt install clear#
+# sudo apt install clear#
 
 cd app
 
-#sudo npm install pm2 -g
-# pm2 kill
+# sudo npm install pm2 -g
+# pm2 kill // if you need to launch again when app is already running
+npm install
 nohup node app.js > /dev/null 2>&1 &
 ```
 6. Save changes and build to test the deployment of the app
