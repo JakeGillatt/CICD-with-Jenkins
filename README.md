@@ -78,7 +78,7 @@ CDE (manual) typically stands for Continuous Delivery Environment. A Continuous 
 - In the bash terminal use command `cat <key file name>` inside the .ssh folder
 - Copy the entire contents of the key and paste it into the 'key' text box on Jenkins
 - Select 'Add' and then select the key name for the 'Credentials' 
-- Rename the branch to */Main
+- Rename the branch to */main
 - Under 'Build environment' tick the 'Provide Node & npm bin/ folder to PATH' box
 - Under 'Build' select 'Add build step / Execute shell`. Enter the following commands into the box:
 ```
