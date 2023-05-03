@@ -103,3 +103,54 @@ Your app is ready and listening on port 3000
 
 Finished: SUCCESS
 ```
+#
+# Merging the Github Dev branch with the Main branch with Jenkins
+
+# Automating CI pipeline
+
+- Step 1. Create a new branch on GitHub
+
+1. Open your Project in VS code
+2. In the Git terminal type `git branch dev` to create a dev branch
+3. Use `git checkout dev` to switch to `dev` branch by default
+4. Now, use `git push -u origin dev` to push your changes to dev branch
+
+- Step 2. Create a job to test a code from dev branch
+
+1. Go to your Jenkins
+2. Create a new task. As it will be identical to the previous task we've created we could use that as a template to copy settings from it
+3. In `Source Code Management` change `Branches to build` to `dev`:
+
+4. The rest you can leave as it is. Click `Save`
+5. Use `Build Now` in order to test the job manually
+
+- Step 3. Merge dev branch with main branch
+
+1. Create a new task on Jenkins
+2. In `General`:
+
+    * Write a description
+    * Set `Discard old builds` to 3
+    * `GitHub Project` copy https link to your project and paste it there
+
+3. In `Source Code management` copy the settings from the previous task. Then click on `Add` in Additional Behaviours and select `Merge before build`:
+
+    * `Name of repository` - set to `origin`
+    * `Branch to merge to` - set to `main`
+    * Rest leave to default
+
+4. In `Post-build Action` click on `Add` and select `Git Publisher`:
+
+- Enable `Push only if build successful`
+- Enable `Merge Results`
+
+5. Click on save
+6. Use `Build Now` in order to test the job manually
+
+- Step 4. Trigger merge job if test is successful
+
+1. Go back to your `CI` job configuration
+2. Scroll down to `Post-build actions` and add `Build other projects`
+3. In `projects to build` type the name of the project you want to run, for example 'jake-devmain-merge'
+4. Save your project
+5. Now, to test if it works, push some changes form your local repo and it should trigger the test first, and if the test is successful it will then merge the changes from dev branch to main branch and push the changes to your GitHub
