@@ -228,7 +228,7 @@ nohup node app.js > /dev/null 2>&1 &
 #
 # How to create a Jenkins server on an EC2
 
-1. Create an EC2 Instance in AWS
+1. Create an EC2 Instance in AWS for Jenkins, using the following:
 - Ubuntu 18.04
 - t2.medium
 - Create a new security group and add the following ports:
@@ -258,7 +258,9 @@ sudo su
 ssh -T git@github.com
 ```
 
-- Enter the EC2 ip in your browser
+- Create another EC2 instance for our APP with the same ubuntu and the same security group, but this time using t2.micro
+
+- Enter the Jenkins EC2 ip in your browser
 - Login to Jenkins with the password from `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
 - Create your account
 - On Jenkins go to 'Manage Jenkins', 'Manage Plugins', and install the following plugins:
