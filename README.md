@@ -256,7 +256,7 @@ sudo ufw enable
 
 sudo su
 ssh -T git@github.com
-``
+```
 
 - Enter the EC2 ip in your browser
 - Login to Jenkins with the password from `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
