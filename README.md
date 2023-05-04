@@ -180,14 +180,14 @@ Finished: SUCCESS
 #
 # Automating CICD to our application on an EC2 Instance
 
-1. Make a new job, we call it `mohammad-ci-merge-dev` and we as before create a template from `mohammad-ci-merge` and scroll down to source code management, additional behaviours and add: `name of repo: origin`, `branch to merge: main`
+1. Make a new job, we call it `jake-ci-merge-dev` and we as before create a template from `jake-ci-merge` and scroll down to source code management, additional behaviours and add: `name of repo: origin`, `branch to merge: main`
 
 2. On post build actions select git publisher, then tick 'Push only if build succeeds' and 'Merge results'
 
-3. Go to our `mohammad-ci-merge` job, scroll all the way down to post build actions and select post-build actions, and select the job we just created.
+3. Go to our `jake-ci-merge` job, scroll all the way down to post build actions and select post-build actions, and select the job we just created.
 
 4. Save and we test as before, on GitBash, change code/readme, `git add .` -> `git commit -m "xxx"` -> `git push origin dev`.
-5. once done, it will deploy it on `mohammad-ci-merge` which will update it on the `dev` branch and as we did post build actions, this triggers the `mohammad-ci-merge-dev` job to deploy, this will merge the `dev` branch with the new changes with the `main branch`
+5. once done, it will deploy it on `jake-ci-merge` which will update it on the `dev` branch and as we did post build actions, this triggers the `jake-ci-merge-dev` job to deploy, this will merge the `dev` branch with the new changes with the `main branch`
 6. Test this by checking the repo on GitHub and navigating between both branches, and see if the changes made on the `dev` branch are the same as the `main` branch
 
 
