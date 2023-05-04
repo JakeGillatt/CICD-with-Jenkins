@@ -224,4 +224,81 @@ nohup node app.js > /dev/null 2>&1 &
 6. Save changes and build to test the deployment of the app
 7. Type public ip with `:3000` at the end to see if the app has deployed
 
-github is broken
+#
+#
+# How to create a Jenkins server on an EC2
+
+1. Create an EC2 Instance in AWS
+- Ubuntu 18.04
+- t2.medium
+- Create a new security group and add the following ports:
+
+8080
+3000
+22
+80
+443
+
+- Install Java and Jenkins with the following commands:
+```
+sudo apt-get update
+sudo apt-get install default-jdk -y
+
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt-get update
+sudo apt-get install jenkins
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+sudo ufw allow OpenSSH
+sudo ufw enable
+
+sudo su
+ssh -T git@github.com
+``
+
+- Enter the EC2 ip in your browser
+- Login to Jenkins with the password from `sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
+- Create your account
+- On Jenkins go to 'Manage Jenkins', 'Manage Plugins', and install the following plugins:
+
+SSH Agent
+Nodejs
+Office 365
+EC2
+
+2. Create a new Jenkins job
+- Tick GitHub project and provide the github repo url  (that contains the app)
+- Set up the ssh connection between GitHub and Jenkins using your key-pair:
+- Paste the public key into your github repo 'Deploy keys'
+- Paste the private key into your Jenkins Job (Under source code management / git)
+- Set the branch to `*/main`
+- Tick 'GitHub hook trigger for GITScm polling'
+- Tick 'Provide Node & npm bin/ folder to PATH'
+- Select your Nodejs
+- Tick SSH Agent and add credentials. Get your 'tech221.pem' key from gitbash with `cat tech221.pem` and paste it in
+- Add a build step and enter the following code into a shell script:
+
+```
+scp -v -r -o StrictHostKeyChecking=no app/ ubuntu@34.243.194.140:/home/ubuntu/
+ssh -A -o StrictHostKeyChecking=no ubuntu@34.243.194.140 <<EOF
+# sudo apt install clear#
+
+cd app
+
+# sudo npm install pm2 -g
+# pm2 kill # // if you need to launch again when app is already running
+npm install
+nohup node app.js > /dev/null 2>&1 &
+```
+  
+- Your Job config should look like the following:
+![ss1](https://user-images.githubusercontent.com/129315605/236267625-124cc72e-ebc5-454f-8e94-b54f258130d4.png)
+![ss2](https://user-images.githubusercontent.com/129315605/236267635-4567c720-6c80-420d-9bb5-1119edf41532.png)
+![ss3](https://user-images.githubusercontent.com/129315605/236267648-a2b49fb5-a9a9-428c-9fb5-a42bb1e6508e.png)
+![ss4](https://user-images.githubusercontent.com/129315605/236267660-c6f493cf-f875-42a8-b9c8-a432259e1ab4.png)
+![ss5](https://user-images.githubusercontent.com/129315605/236267682-e3353fdd-bc1f-4650-b1fd-1a2e0cc2767f.png)
+  
+ - Save the Job and click 'Build Now'
+ - Enter your EC2 ip into your browser with port 3000 to test the app is running.
