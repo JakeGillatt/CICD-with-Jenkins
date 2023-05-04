@@ -223,3 +223,5 @@ nohup node app.js > /dev/null 2>&1 &
 ```
 6. Save changes and build to test the deployment of the app
 7. Type public ip with `:3000` at the end to see if the app has deployed
+
+github is broken
