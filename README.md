@@ -54,6 +54,8 @@ CD is a practice that automates the process of deploying code changes to product
 CDE (manual) typically stands for Continuous Delivery Environment. A Continuous Delivery Environment refers to the infrastructure and resources required to automate the delivery of software applications from development to production. It includes the tools, processes, and infrastructure needed to deploy, configure, and manage the application in various environments, such as staging and production. 
 
 #
+![CICD1](https://user-images.githubusercontent.com/129315605/236151223-a3e9e954-3bfe-4b06-b09c-36ff38157c10.png)
+#
 # Connecting Jenkins to a Github Repo containing the APP and running a test for the APP
 
 1. In the Git Bash terminal, we need to create a new SSH key pair for Github and Jenkins:
